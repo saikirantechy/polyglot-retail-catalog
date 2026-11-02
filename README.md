@@ -344,6 +344,8 @@ AlloyDB, Cloud Run, BigQuery, Cloud Storage, Vertex AI and Agent Engine can incu
 
 ## Roadmap
 
+Tracking lives in [`TODO.md`](TODO.md). Deferred items:
+
 - [ ] Image upload to Cloud Storage with signed URLs
 - [ ] Real pgvector embedding generation command
 - [ ] Mongo → BigQuery scheduled export
