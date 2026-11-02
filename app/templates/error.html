@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ status }} &middot; Polyglot Store{% endblock %}
+
+{% block content %}
+<section class="empty-state error-state">
+  <p class="eyebrow">Error {{ status }}</p>
+  <h1>{{ message }}</h1>
+  <p>The page could not be completed. Return to the catalog or ask the assistant for help.</p>
+  <div class="actions">
+    <a class="button primary" href="{{ url_for('web.index') }}">Back to catalog</a>
+    <a class="button ghost" href="{{ url_for('web.chat_page') }}">Open the assistant</a>
+  </div>
+</section>
+{% endblock %}

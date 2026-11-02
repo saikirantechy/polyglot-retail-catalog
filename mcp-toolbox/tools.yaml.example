@@ -1,0 +1,158 @@
+# MCP Toolbox for Databases configuration template.
+#
+# Copy to mcp-toolbox/tools.yaml (gitignored), fill in environment variables,
+# then validate against the Toolbox version you deploy:
+#
+#   toolbox --config mcp-toolbox/tools.yaml --ui
+#
+# Toolbox expands ${VAR} from the process environment. Keep MongoDB URIs and
+# passwords in Secret Manager when deploying to Cloud Run.
+
+sources:
+  alloydb-source:
+    kind: alloydb-postgres
+    project: ${PROJECT_ID}
+    region: ${REGION}
+    cluster: ${ALLOYDB_CLUSTER}
+    instance: ${ALLOYDB_INSTANCE}
+    database: ${ALLOYDB_DATABASE}
+    user: ${ALLOYDB_USER}
+    password: ${ALLOYDB_PASSWORD}
+    ipType: public
+
+  mongodb-source:
+    kind: mongodb
+    uri: ${MONGODB_URI}
+    database: ${MONGODB_DB}
+
+  bigquery-source:
+    kind: bigquery
+    project: ${BIGQUERY_PROJECT}
+
+tools:
+  search-products:
+    kind: postgres-sql
+    source: alloydb-source
+    description: Search AlloyDB products by name, SKU, category or visual tag.
+    parameters:
+      - name: search_term
+        type: string
+        description: Free-text search term.
+      - name: max_rows
+        type: integer
+        description: Maximum rows to return.
+        default: 5
+    statement: |
+      SELECT product_id, name, sku, price, stock, category, description
+      FROM products_core_table
+      WHERE name ILIKE '%' || $1 || '%'
+         OR sku ILIKE '%' || $1 || '%'
+         OR category ILIKE '%' || $1 || '%'
+         OR EXISTS (
+              SELECT 1 FROM unnest(visual_tags) AS tag
+              WHERE tag ILIKE '%' || $1 || '%'
+            )
+      ORDER BY name
+      LIMIT $2;
+
+  get-product:
+    kind: postgres-sql
+    source: alloydb-source
+    description: Fetch one product by product UUID or SKU.
+    parameters:
+      - name: identifier
+        type: string
+        description: Product UUID or SKU such as AUD-1001.
+    statement: |
+      SELECT product_id, name, sku, price, stock, category, description,
+             image_url, visual_tags
+      FROM products_core_table
+      WHERE product_id::text = $1 OR LOWER(sku) = LOWER($1)
+      LIMIT 1;
+
+  similar-products:
+    kind: postgres-sql
+    source: alloydb-source
+    description: Find products near a reference product using pgvector embeddings or tag overlap.
+    parameters:
+      - name: product_identifier
+        type: string
+        description: Reference product UUID or SKU.
+      - name: max_rows
+        type: integer
+        description: Maximum rows to return.
+        default: 5
+    statement: |
+      WITH reference AS (
+        SELECT img_embeddings, visual_tags, category
+        FROM products_core_table
+        WHERE product_id::text = $1 OR LOWER(sku) = LOWER($1)
+      )
+      SELECT p.product_id, p.name, p.sku, p.price, p.stock, p.category,
+             p.description,
+             CASE
+               WHEN p.img_embeddings IS NOT NULL AND r.img_embeddings IS NOT NULL
+                 THEN 1 - (p.img_embeddings <=> r.img_embeddings)
+               ELSE 0
+             END AS similarity
+      FROM products_core_table p, reference r
+      WHERE p.product_id <> COALESCE(
+              (SELECT product_id FROM products_core_table
+               WHERE product_id::text = $1 OR LOWER(sku) = LOWER($1)), '')
+        AND (p.category = r.category OR p.visual_tags && r.visual_tags)
+      ORDER BY similarity DESC, p.name
+      LIMIT $2;
+
+  check-stock:
+    kind: postgres-sql
+    source: alloydb-source
+    description: Check live stock for one product.
+    parameters:
+      - name: identifier
+        type: string
+        description: Product UUID or SKU.
+    statement: |
+      SELECT product_id, name, sku, stock,
+             CASE WHEN stock > 0 THEN true ELSE false END AS in_stock
+      FROM products_core_table
+      WHERE product_id::text = $1 OR LOWER(sku) = LOWER($1)
+      LIMIT 1;
+
+  get-product-details:
+    kind: mongodb-find
+    source: mongodb-source
+    description: Fetch flexible product attributes from MongoDB by SKU.
+    database: ${MONGODB_DB}
+    collection: product_details_collection
+    parameters:
+      - name: sku
+        type: string
+        description: Product SKU such as AUD-1001.
+    filterPayload: '{"sku": "{{.sku}}"}'
+
+  top-products:
+    kind: bigquery-sql
+    source: bigquery-source
+    description: Return products with the highest interaction weight.
+    parameters:
+      - name: max_rows
+        type: integer
+        description: Maximum rows to return.
+        default: 5
+    statement: |
+      SELECT product_id,
+             SUM(interaction_score) AS score,
+             COUNT(*) AS events
+      FROM `${BIGQUERY_PROJECT}.${BIGQUERY_DATASET}.${BIGQUERY_TABLE}`
+      GROUP BY product_id
+      ORDER BY score DESC, events DESC
+      LIMIT $1;
+
+toolsets:
+  ecommerce:
+    - search-products
+    - get-product
+    - similar-products
+    - check-stock
+    - get-product-details
+    - top-products

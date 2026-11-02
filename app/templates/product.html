@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} &middot; Polyglot Store{% endblock %}
+
+{% block content %}
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <a href="{{ url_for('web.index') }}">Catalog</a>
+  <span aria-hidden="true">/</span>
+  <a href="{{ url_for('web.index', category=product.category) }}">{{ product.category }}</a>
+  <span aria-hidden="true">/</span>
+  <span>{{ product.name }}</span>
+</nav>
+
+<section class="product-detail">
+  <div class="detail-thumb cat-{{ product.category|lower }}" aria-hidden="true">
+    <span>{{ product.name[:2]|upper }}</span>
+  </div>
+  <div class="detail-copy">
+    <div class="product-meta">
+      <span class="pill">{{ product.category }}</span>
+      {% if product.in_stock %}
+        <span class="stock in">{{ product.stock }} in stock</span>
+      {% else %}
+        <span class="stock out">Sold out</span>
+      {% endif %}
+    </div>
+    <h1>{{ product.name }}</h1>
+    <p class="detail-sku">SKU {{ product.sku }} &middot; ID {{ product.product_id }}</p>
+    <p class="detail-price">${{ "%.2f"|format(product.price) }}</p>
+    <p class="detail-desc">{{ product.description }}</p>
+
+    <div class="actions">
+      <button class="button primary" type="button"
+              data-track data-product-id="{{ product.product_id }}" data-event-type="add_to_cart"
+              {% if not product.in_stock %}disabled{% endif %}>
+        {% if product.in_stock %}Add to cart{% else %}Out of stock{% endif %}
+      </button>
+      <button class="button" type="button"
+              data-track data-product-id="{{ product.product_id }}" data-event-type="like">
+        Save for later
+      </button>
+      <a class="button ghost" href="{{ url_for('web.chat_page') }}?q={{ ('Tell me about ' ~ product.name)|urlencode }}">Ask the assistant</a>
+    </div>
+
+    <div class="detail-tags">
+      {% for tag in product.visual_tags %}
+        <span class="tag">{{ tag }}</span>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if product.attributes %}
+<section class="panel">
+  <h2>Flexible attributes <span class="muted">from MongoDB</span></h2>
+  <dl class="attribute-grid">
+    {% for key, value in product.attributes.items() %}
+      <div>
+        <dt>{{ key|replace('_', ' ')|capitalize }}</dt>
+        <dd>
+          {% if value is string %}
+            {{ value }}
+          {% elif value is iterable %}
+            {{ value|join(', ') }}
+          {% else %}
+            {{ value }}
+          {% endif %}
+        </dd>
+      </div>
+    {% endfor %}
+  </dl>
+</section>
+{% endif %}
+
+<section class="panel">
+  <h2>Visually similar <span class="muted">pgvector or tag overlap</span></h2>
+  {% if similar %}
+    <div class="similar-grid">
+      {% for item in similar %}
+        <a class="similar-card" href="{{ url_for('web.product_detail', identifier=item.sku) }}">
+          <span class="similar-score">{{ "%.0f"|format((item.similarity or 0) * 100) }}% match</span>
+          <strong>{{ item.name }}</strong>
+          <span class="muted">{{ item.sku }} &middot; ${{ "%.2f"|format(item.price) }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">No similar products are available yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

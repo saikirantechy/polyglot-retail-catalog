@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Assistant &middot; Polyglot Store{% endblock %}
+
+{% block content %}
+<section class="chat-shell">
+  <header class="chat-header">
+    <div>
+      <p class="eyebrow">Catalog assistant</p>
+      <h1>Ask across the product data.</h1>
+      <p class="lede">
+        The assistant calls catalog, stock, similarity and analytics tools before answering.
+        {% if assistant_name == "rule-based" %}
+          It is currently running in local demo mode.
+        {% endif %}
+      </p>
+    </div>
+    <span class="mode-badge mode-{{ mode }}">{{ assistant_name }}</span>
+  </header>
+
+  <div class="suggestions" aria-label="Suggested prompts">
+    {% for suggestion in suggestions %}
+      <button class="chip" type="button" data-prompt="{{ suggestion }}">{{ suggestion }}</button>
+    {% endfor %}
+  </div>
+
+  <div id="chat-log" class="chat-log" role="log" aria-live="polite" aria-relevant="additions">
+    <div class="message assistant">
+      <div class="message-body">
+        <p>Hello. I can search the catalog, check stock, find similar products and show what is popular. What are you looking for?</p>
+      </div>
+    </div>
+  </div>
+
+  <form id="chat-form" class="chat-form">
+    <label class="sr-only" for="chat-input">Message</label>
+    <textarea id="chat-input" name="message" rows="2" maxlength="2000"
+              placeholder="e.g. Show me wireless headphones under $200" required></textarea>
+    <button class="button primary" type="submit">Send</button>
+  </form>
+  <p id="chat-status" class="chat-status" role="status"></p>
+  <p id="chat-notice" class="chat-notice" hidden></p>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}" defer></script>
+{% endblock %}

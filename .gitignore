@@ -1,0 +1,44 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+service-account*.json
+credentials*.json
+mcp-toolbox/tools.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Demo database
+instance/
+*.db
+*.db-wal
+*.db-shm
+
+# JSON exports may contain personal data; keep published seeds explicit
+*.json
+!app/data/*.json
+!.github/**/*.json
+!**/*_export.example.json
+!**/sample*.json
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+*.log
+core
+core.*

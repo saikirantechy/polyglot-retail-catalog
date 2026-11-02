@@ -1,0 +1,28 @@
+services:
+  app:
+    build: .
+    image: polyglot-retail-catalog:local
+    ports:
+      - "8080:8080"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PORT: 8080
+      DEMO_DB_PATH: /app/instance/demo.db
+    volumes:
+      - instance:/app/instance
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    profiles: ["mongo"]
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+volumes:
+  instance:
+  mongo-data:

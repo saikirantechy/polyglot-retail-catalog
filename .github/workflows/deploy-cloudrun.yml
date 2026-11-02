@@ -1,0 +1,88 @@
+name: Deploy to Cloud Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: Google Cloud project ID
+        required: true
+        type: string
+      region:
+        description: Cloud Run region
+        required: true
+        default: us-central1
+        type: string
+      service:
+        description: Cloud Run service name
+        required: true
+        default: polyglot-retail-catalog
+        type: string
+      demo_mode:
+        description: Deploy without cloud data stores (true/false)
+        required: true
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-${{ inputs.service }}
+  cancel-in-progress: false
+
+env:
+  PROJECT_ID: ${{ inputs.project_id }}
+  REGION: ${{ inputs.region }}
+  SERVICE: ${{ inputs.service }}
+  REPOSITORY: containers
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+
+      - name: Build and push image
+        run: |
+          IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${SERVICE}:${GITHUB_SHA}"
+          docker build -t "${IMAGE}" .
+          docker push "${IMAGE}"
+          echo "IMAGE=${IMAGE}" >> "$GITHUB_ENV"
+
+      - name: Deploy
+        run: |
+          gcloud run deploy "${SERVICE}" \
+            --image "${IMAGE}" \
+            --region "${REGION}" \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8080 \
+            --cpu 1 \
+            --memory 512Mi \
+            --min-instances 0 \
+            --max-instances 5 \
+            --set-env-vars "GOOGLE_CLOUD_PROJECT=${PROJECT_ID},REGION=${REGION},DEMO_MODE=${{ inputs.demo_mode }}" \
+            --set-secrets "ALLOYDB_DSN=alloydb-dsn:latest,MONGODB_URI=mongodb-uri:latest"
+
+      - name: Print service URL
+        run: |
+          gcloud run services describe "${SERVICE}" \
+            --region "${REGION}" \
+            --format='value(status.url)'

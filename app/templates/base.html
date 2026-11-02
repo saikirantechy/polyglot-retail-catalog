@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Polyglot Store{% endblock %}</title>
+  <meta name="description" content="A multi-database ecommerce catalog built with AlloyDB, MongoDB, BigQuery and Gemini.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('web.index') }}">
+      <span class="brand-mark" aria-hidden="true">PS</span>
+      <span class="brand-name">Polyglot Store</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="{{ url_for('web.index') }}">Catalog</a>
+      <a href="{{ url_for('web.chat_page') }}">Assistant</a>
+      <a href="{{ url_for('health.health') }}">API</a>
+    </nav>
+    <span class="mode-badge mode-{{ mode }}" title="Active data backends">{{ mode }}</span>
+  </header>
+
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>Polyglot Store is a learning implementation of Google Cloud's multi-database retail codelab.
+      Catalog data is illustrative and not a real storefront.</p>
+    <p class="footer-meta">Assistant: {{ assistant_name }} &middot; Mode: {{ mode }}</p>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

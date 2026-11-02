@@ -1,0 +1,21 @@
+<article class="product-card">
+  <a class="product-thumb cat-{{ product.category|lower }}" href="{{ url_for('web.product_detail', identifier=product.sku) }}" aria-hidden="true" tabindex="-1">
+    <span>{{ product.name[:2]|upper }}</span>
+  </a>
+  <div class="product-body">
+    <div class="product-meta">
+      <span class="pill">{{ product.category }}</span>
+      {% if product.in_stock %}
+        <span class="stock in">In stock</span>
+      {% else %}
+        <span class="stock out">Sold out</span>
+      {% endif %}
+    </div>
+    <h3><a href="{{ url_for('web.product_detail', identifier=product.sku) }}">{{ product.name }}</a></h3>
+    <p class="product-desc">{{ product.description|truncate(110) }}</p>
+    <div class="product-foot">
+      <span class="price">${{ "%.2f"|format(product.price) }}</span>
+      <span class="sku">{{ product.sku }}</span>
+    </div>
+  </div>
+</article>

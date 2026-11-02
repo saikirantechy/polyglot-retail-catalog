@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Catalog &middot; Polyglot Store{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Multi-database catalog</p>
+    <h1>Find the right product, backed by live data.</h1>
+    <p class="lede">
+      Products come from AlloyDB, flexible attributes from MongoDB, popularity from BigQuery,
+      and the assistant reasons across all three.
+    </p>
+    <form class="search" method="get" action="{{ url_for('web.index') }}" role="search">
+      <label class="sr-only" for="q">Search products</label>
+      <input id="q" type="search" name="q" value="{{ q }}" placeholder="Search products, tags or categories">
+      {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
+      <button type="submit">Search</button>
+    </form>
+    <p class="hero-hint">Try &ldquo;wireless&rdquo;, &ldquo;camera&rdquo; or <a href="{{ url_for('web.chat_page') }}">ask the assistant</a>.</p>
+  </div>
+  <aside class="hero-panel">
+    <p class="panel-title">Live service map</p>
+    <dl class="stat-list">
+      <div><dt>Catalog</dt><dd>{{ product_count if product_count is not none else "unavailable" }} products</dd></div>
+      <div><dt>Assistant</dt><dd>{{ assistant_name }}</dd></div>
+      <div><dt>Mode</dt><dd>{{ mode }}</dd></div>
+    </dl>
+    <p class="panel-note">Run the app with no cloud credentials to explore demo mode.</p>
+  </aside>
+</section>
+
+<section class="filters" aria-label="Category filters">
+  <a class="chip {% if not category %}active{% endif %}" href="{{ url_for('web.index', q=q or None, max_price=max_price) }}">All categories</a>
+  {% for item in categories %}
+    <a class="chip {% if category == item %}active{% endif %}"
+       href="{{ url_for('web.index', category=item, q=q or None, max_price=max_price) }}">{{ item }}</a>
+  {% endfor %}
+</section>
+
+{% if q or category or max_price %}
+<p class="result-summary">
+  {{ products|length }} result{% if products|length != 1 %}s{% endif %}
+  {% if q %}for &ldquo;{{ q }}&rdquo;{% endif %}
+  {% if category %}in {{ category }}{% endif %}
+  {% if max_price %}under ${{ "%.2f"|format(max_price) }}{% endif %}
+  &middot; <a href="{{ url_for('web.index') }}">clear</a>
+</p>
+{% endif %}
+
+<section class="product-grid" aria-label="Products">
+  {% for product in products %}
+    {% include "partials/product_card.html" %}
+  {% else %}
+    <div class="empty-state">
+      <h2>No products matched.</h2>
+      <p>Try a different search term, category, or ask the assistant for suggestions.</p>
+      <a class="button" href="{{ url_for('web.chat_page') }}">Open the assistant</a>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

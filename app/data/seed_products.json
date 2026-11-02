@@ -1,0 +1,210 @@
+[
+  {
+    "product_id": "11111111-1111-4111-8111-111111111101",
+    "name": "Aurora Wireless Headphones",
+    "sku": "AUD-1001",
+    "price": 249.0,
+    "stock": 24,
+    "category": "Audio",
+    "description": "Over-ear noise-cancelling headphones with 32-hour battery life and a lightweight aluminium frame.",
+    "image_url": "",
+    "visual_tags": ["over-ear", "wireless", "noise-cancelling", "black", "premium"],
+    "attributes": {
+      "color": "Midnight Black",
+      "material": "Aluminium and memory foam",
+      "battery_hours": 32,
+      "connectivity": "Bluetooth 5.3",
+      "features": ["Active noise cancellation", "Multipoint pairing", "Fold-flat case"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111102",
+    "name": "Nimbus Earbuds Pro",
+    "sku": "AUD-1002",
+    "price": 129.0,
+    "stock": 80,
+    "category": "Audio",
+    "description": "Compact wireless earbuds with adaptive noise cancellation and a pocket-sized charging case.",
+    "image_url": "",
+    "visual_tags": ["in-ear", "wireless", "noise-cancelling", "white", "compact"],
+    "attributes": {
+      "color": "Cloud White",
+      "material": "Recycled polycarbonate",
+      "battery_hours": 24,
+      "connectivity": "Bluetooth 5.3",
+      "features": ["Adaptive ANC", "IPX4 water resistance", "Wireless charging"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111103",
+    "name": "Pulse Smartwatch Series 5",
+    "sku": "WEA-2001",
+    "price": 299.0,
+    "stock": 15,
+    "category": "Wearables",
+    "description": "AMOLED smartwatch with continuous heart-rate tracking, GPS and a seven-day battery.",
+    "image_url": "",
+    "visual_tags": ["smartwatch", "fitness", "amoled", "black", "premium"],
+    "attributes": {
+      "color": "Graphite",
+      "material": "Stainless steel",
+      "battery_hours": 168,
+      "water_resistance": "5 ATM",
+      "features": ["GPS", "SpO2 sensor", "Sleep tracking"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111104",
+    "name": "Drift Fitness Band",
+    "sku": "WEA-2002",
+    "price": 79.0,
+    "stock": 0,
+    "category": "Wearables",
+    "description": "Lightweight fitness band for step, sleep and workout tracking with a slim teal strap.",
+    "image_url": "",
+    "visual_tags": ["fitness", "band", "lightweight", "teal", "budget"],
+    "attributes": {
+      "color": "Teal",
+      "material": "Silicone",
+      "battery_hours": 336,
+      "water_resistance": "3 ATM",
+      "features": ["Step counter", "Sleep tracking", "Phone notifications"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111105",
+    "name": "Halo Desk Lamp",
+    "sku": "HOM-3001",
+    "price": 89.0,
+    "stock": 42,
+    "category": "Home",
+    "description": "Minimal LED desk lamp with adjustable colour temperature and a touch dimmer.",
+    "image_url": "",
+    "visual_tags": ["lamp", "minimal", "led", "white", "desk"],
+    "attributes": {
+      "color": "Warm White",
+      "material": "Powder-coated steel",
+      "dimensions": "42 x 18 x 38 cm",
+      "features": ["Touch dimmer", "Three colour temperatures", "USB-C powered"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111106",
+    "name": "Terra Ceramic Planter",
+    "sku": "HOM-3002",
+    "price": 34.5,
+    "stock": 120,
+    "category": "Home",
+    "description": "Matte ceramic planter with a drainage tray for small indoor plants.",
+    "image_url": "",
+    "visual_tags": ["planter", "ceramic", "matte", "green", "decor"],
+    "attributes": {
+      "color": "Sage Green",
+      "material": "Glazed ceramic",
+      "dimensions": "16 cm diameter",
+      "features": ["Drainage hole", "Removable tray", "Indoor use"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111107",
+    "name": "Vista Mirrorless Camera",
+    "sku": "PHO-4001",
+    "price": 1299.0,
+    "stock": 6,
+    "category": "Photography",
+    "description": "24 MP mirrorless camera with 4K video, in-body stabilisation and a bright OLED viewfinder.",
+    "image_url": "",
+    "visual_tags": ["camera", "mirrorless", "4k", "black", "premium"],
+    "attributes": {
+      "color": "Black",
+      "sensor": "24 MP APS-C",
+      "video": "4K 60fps",
+      "features": ["In-body stabilisation", "OLED viewfinder", "Dual card slots"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111108",
+    "name": "Orbit Action Camera",
+    "sku": "PHO-4002",
+    "price": 399.0,
+    "stock": 18,
+    "category": "Photography",
+    "description": "Rugged waterproof action camera with horizon lock and a wide-angle lens.",
+    "image_url": "",
+    "visual_tags": ["camera", "action", "waterproof", "rugged", "outdoor"],
+    "attributes": {
+      "color": "Slate Grey",
+      "video": "4K 120fps",
+      "water_resistance": "10 m without case",
+      "features": ["Horizon lock", "Voice control", "Magnetic mount"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111109",
+    "name": "Vertex Mechanical Keyboard",
+    "sku": "GAM-5001",
+    "price": 159.0,
+    "stock": 33,
+    "category": "Gaming",
+    "description": "Hot-swappable mechanical keyboard with per-key RGB lighting and a gasket-mounted plate.",
+    "image_url": "",
+    "visual_tags": ["keyboard", "mechanical", "rgb", "black", "gaming"],
+    "attributes": {
+      "color": "Black",
+      "switches": "Tactile hot-swappable",
+      "layout": "75%",
+      "features": ["Per-key RGB", "Gasket mount", "USB-C detachable cable"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111110",
+    "name": "Nova Gaming Mouse",
+    "sku": "GAM-5002",
+    "price": 69.0,
+    "stock": 64,
+    "category": "Gaming",
+    "description": "Lightweight wireless gaming mouse with a 26K optical sensor and 90-hour battery.",
+    "image_url": "",
+    "visual_tags": ["mouse", "wireless", "lightweight", "white", "gaming"],
+    "attributes": {
+      "color": "Arctic White",
+      "weight": "58 g",
+      "sensor": "26,000 DPI",
+      "features": ["Wireless", "90-hour battery", "PTFE feet"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111111",
+    "name": "Summit Trail Backpack",
+    "sku": "ACC-6001",
+    "price": 119.0,
+    "stock": 27,
+    "category": "Accessories",
+    "description": "Water-resistant 28-litre hiking backpack with a ventilated back panel and laptop sleeve.",
+    "image_url": "",
+    "visual_tags": ["backpack", "outdoor", "water-resistant", "olive", "travel"],
+    "attributes": {
+      "color": "Olive",
+      "capacity": "28 L",
+      "material": "Recycled ripstop nylon",
+      "features": ["Ventilated back panel", "Padded laptop sleeve", "Rain cover"]
+    }
+  },
+  {
+    "product_id": "11111111-1111-4111-8111-111111111112",
+    "name": "Slate Laptop Sleeve",
+    "sku": "ACC-6002",
+    "price": 45.0,
+    "stock": 95,
+    "category": "Accessories",
+    "description": "Felt laptop sleeve with a magnetic closure and a slim accessory pocket.",
+    "image_url": "",
+    "visual_tags": ["sleeve", "laptop", "felt", "grey", "minimal"],
+    "attributes": {
+      "color": "Heather Grey",
+      "material": "Recycled felt",
+      "fits": "13-14 inch laptops",
+      "features": ["Magnetic closure", "Accessory pocket", "Water-resistant base"]
+    }
+  }
+]

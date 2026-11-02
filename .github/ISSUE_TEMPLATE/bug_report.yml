@@ -1,0 +1,43 @@
+name: Bug report
+description: Report a reproducible problem
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include secrets, project IDs, connection strings or customer data.
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run ...
+        2. Open ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options:
+        - demo (SQLite)
+        - hybrid
+        - cloud (AlloyDB + MongoDB + BigQuery)
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      render: shell
